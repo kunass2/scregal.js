@@ -26,9 +26,9 @@
 
 .scregalNavigation, .scregalClose { width: 100px; height: 100px; background-repeat: no-repeat; background-position: center; position: absolute; opacity: 0.5; display: block; z-index: 2; cursor: pointer; }
 .scregalNavigation:hover, .scregalClose:hover { opacity: 1; }
-.scregalLeftNavigation { left: 30px; background-image: url('../img/scregal/arrow-left.png'); }
-.scregalRightNavigation { right: 30px; background-image: url('../img/scregal/arrow-right.png'); }
-.scregalClose { top: 30px; right: 30px; background-image: url('../img/scregal/close.png'); background-size: 30px; }
+.scregalLeftNavigation { left: 30px; background-image: url('../img/arrow-left.png'); }
+.scregalRightNavigation { right: 30px; background-image: url('../img/arrow-right.png'); }
+.scregalClose { top: 30px; right: 30px; background-image: url('../img/close.png'); background-size: 30px; }
 
 /* footer pattern */
 
