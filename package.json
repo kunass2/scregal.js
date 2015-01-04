@@ -1,6 +1,6 @@
 {
   "name": "jquery.scregal",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Full Screen Gallery",
   "filename": "jquery.scregal.js",
   "repository": {
@@ -25,7 +25,7 @@
   "autoupdate": {
     "source": "git",
     "target": "https://github.com/kunass2/scregal.js.git",
-    "basePath": "dist",
+    "basePath": "",
     "files": [
       "*"
     ]
