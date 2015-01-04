@@ -1,28 +1,66 @@
 /**
  * Copyright (c) Bartłomiej Semańczyk - bartekss2@gmail.com http://www.blue-world.pl
- * @version 1.0
- * Last Update: Friday, 2 January 2015
+ * @version 1.1
+ * Last Update: Sunday, 4 January 2015
 */
 
 (function($) {
 	'use strict';
+
+	var classnames = {
+		scregalAdding: "scregalAdding",
+		scregalAdded: "scregalAdded",
+		scregalRemoving: "scregalRemoving",
+		scregalRemoved: "scregalRemoved",
+		scregalFigure: "scregalFigure",
+		scregalWrap: "scregalWrap",
+
+		scregalBox: "scregalBox",
+		scregalBesideBox: "scregalBesideBox",
+		scregalCenterBox: "scregalCenterBox",
+		scregalLeftBox: "scregalLeftBox",
+		scregalRightBox: "scregalRightBox",
+
+		scregalTitle: "scregalTitle",
+		scregalFront: "scregalFront",
+
+		scregalLeftImg: "scregalLeftImg",
+		scregalRightImg: "scregalRightImg",
+		scregalCenterImg: "scregalCenterImg",
+
+		scregalClose: "scregalClose",
+		scregalNavigation: "scregalNavigation",
+		scregalLeftNavigation: "scregalLeftNavigation",
+		scregalRightNavigation: "scregalRightNavigation"
+	};
+
+	if (window.scregal === undefined) {
+		window.scregal = {};
+	}
+	window.scregal.classnames = classnames;
+
+	function _(str) {
+		var dot = ".";
+		return dot + str + ' ';
+	}
+
 	var Scregal = (function() {
 
 		/* boxes */
 		var $instance = undefined;
-		var $scregalBox = $('<div class="scregalBox">');
-		var $scregalLeftBox = $('<a href="#" class="scregalWrap scregalLeftBox scregalBesideBox">');
-		var $scregalCenterBox = $('<div class="scregalWrap scregalCenterBox">');
-		var $scregalRightBox = $('<a href="#" class="scregalWrap scregalRightBox scregalBesideBox">');
+		var $scregalBox = $('<div class="' + window.scregal.classnames.scregalBox + '">');
+		var $scregalLeftBox = $('<a href="#" class="' + window.scregal.classnames.scregalWrap + ' ' + window.scregal.classnames.scregalLeftBox + ' ' + window.scregal.classnames.scregalBesideBox + '">');
+		var $scregalCenterBox = $('<div class="' + window.scregal.classnames.scregalWrap + ' ' + window.scregal.classnames.scregalCenterBox + '">');
+		var $scregalRightBox = $('<a href="#" class="' + window.scregal.classnames.scregalWrap + ' ' + window.scregal.classnames.scregalRightBox + ' ' + window.scregal.classnames.scregalBesideBox + '">');
 
-		var $scregalLeftImg = $('<img class="scregalLeftImg" />').css('display', 'none');
-		var $scregalCenterImg = $('<img class="scregalCenterImg" />').css('display', 'none');
-		var $scregalRightImg = $('<img class="scregalRightImg" />').css('display', 'none');
+		var $scregalLeftImg = $('<img class="' + window.scregal.classnames.scregalLeftImg + '" />').css('display', 'none');
+		var $scregalCenterImg = $('<img class="' + window.scregal.classnames.scregalCenterImg + '" />').css('display', 'none');
+		var $scregalRightImg = $('<img class="' + window.scregal.classnames.scregalRightImg + '" />').css('display', 'none');
 
-		var $scregalRightNav = $('<div class="scregalNavigation scregalRightNavigation">');
-		var $scregalLeftNav = $('<div class="scregalNavigation scregalLeftNavigation">');
-		var $scregalClose = $('<div class="scregalClose">');
-		var $scregalFront = $('<div class="scregalFront"><div class="scregalTitle"></div></div>').css('display', 'none');
+		var $scregalRightNav = $('<div class="' + window.scregal.classnames.scregalNavigation + ' ' + window.scregal.classnames.scregalRightNavigation + '">');
+		var $scregalLeftNav = $('<div class="' + window.scregal.classnames.scregalNavigation + ' ' + window.scregal.classnames.scregalLeftNavigation + '">');
+		var $scregalClose = $('<div class="' + window.scregal.classnames.scregalClose + '">');
+		var $scregalFront = $('<div class="' + window.scregal.classnames.scregalFront + '"><div class="' + window.scregal.classnames.scregalTitle + '"></div></div>').css('display', 'none');
 
 		//flags
 		var isInitialized = false;
@@ -47,7 +85,7 @@
 
 		/* options */
 		var defaults = {
-			elems: '> a',
+			elems: '.gallery-box > a',
 			maxWidth: '95%',
 			centerDisappearAnimation: { opacity: 0 },
 			sideDisappearAnimation: { opacity: 0 },
@@ -63,6 +101,7 @@
 			hideFrontWhenAutoGallery: false,
 			runAutoGalleryAfterDelay: 5000,
 			autoGalleryDelay: 3000,
+			init: true,
 			prev: undefined,
 			next: undefined,
 			close: undefined,
@@ -78,7 +117,7 @@
 		var Scregal_Class = function(gallery, opts) {
 			var that = this;
 			this.updateOptions(opts);
-			this.create_scregal_box();
+
 
 			$instance = gallery;
 			if (typeof gallery === 'string') {
@@ -86,30 +125,20 @@
 			}
 
 			if ($instance.length) {
-				$instance.find(defaults.elems).each(function() {
+				$(defaults.elems).each(function() {
 					that.append($(this));
 				});
-				return this;
+				// return this;
 			} else {
-				// throw 'There is no instance of Scregal for';
+				// throw 'There is no instance of gallery for Scregal';
+			}
+			if (defaults.init) {
+				this.init();
 			}
 		};
 
-		Scregal_Class.prototype.updateOptions = function(opts) {
-			opts ? $.extend(defaults, opts) : '';
-		};
-
-		Scregal_Class.prototype.create_navigation = function() {
+		Scregal_Class.prototype.init = function() {
 			var that = this;
-
-			!defaults.prev ? $scregalBox.append($scregalLeftNav) : '';
-			!defaults.next ? $scregalBox.append($scregalRightNav) : '';
-			!defaults.close ? $scregalBox.append($scregalClose) : '';
-
-			defaults.isNavigationHidden ? that.disappearNavigation() : '';
-		};
-
-		Scregal_Class.prototype.create_scregal_box = function() {
 			if (!isInitialized) {
 				$('body').prepend($scregalBox);
 				$scregalBox.append($scregalLeftBox, $scregalCenterBox, $scregalRightBox, $scregalLeftImg, $scregalCenterImg, $scregalRightImg);
@@ -120,11 +149,22 @@
 				 	$scregalFront.show(0);
 				}
 
-				this.create_navigation();
+				!defaults.prev ? $scregalBox.append($scregalLeftNav) : '';
+				!defaults.next ? $scregalBox.append($scregalRightNav) : '';
+				!defaults.close ? $scregalBox.append($scregalClose) : '';
+
+				defaults.isNavigationHidden ? that.disappearNavigation() : '';
+
 				this.set_other_handlers();
 				isInitialized = true;
+				$instance.trigger('scregalInitialized');
 			}
 		};
+
+		Scregal_Class.prototype.updateOptions = function(opts) {
+			opts ? $.extend(defaults, opts) : '';
+		};
+
 
 		Scregal_Class.prototype.append = function(elems) {
 			var that = this;
@@ -193,8 +233,8 @@
 		};
 
 		Scregal_Class.prototype.is_navigation_hover = function() {
-			var prev = defaults.prev ? defaults.prev + ':hover' : '.scregalLeftNavigation:hover';
-			var next = defaults.next ? defaults.next + ':hover' : '.scregalRightNavigation:hover';
+			var prev = defaults.prev ? defaults.prev + ':hover' : _(window.scregal.classnames.scregalLeftNavigation) + ':hover';
+			var next = defaults.next ? defaults.next + ':hover' : _(window.scregal.classnames.scregalRightNavigation) + ':hover';
 			var elems = $(prev + ', ' + next);
 			var isHover = elems.length ? true : false;
 
@@ -242,7 +282,7 @@
 				that.autoGalleryInit();
 			});
 
-			$('.scregalCenterImg, .scregalLeftImg, .scregalRightImg').load(function(){
+			$(_(window.scregal.classnames.scregalCenterImg) + ', ' + _(window.scregal.classnames.scregalLeftImg) + ', ' + _(window.scregal.classnames.scregalRightImg)).load(function(){
 				recent_data_image[$(this).attr('class')]['width'] = $(this).width();
 				recent_data_image[$(this).attr('class')]['height'] = $(this).height();
 				recent_data_image[$(this).attr('class')]['href'] = $(this).attr('src');
@@ -258,31 +298,31 @@
 				that.update_boxes_size();
 			});
 
-			$('body').on('click', '.scregalRightBox', function(e){
+			$('body').on('click', _(window.scregal.classnames.scregalRightBox), function(e){
 				e.preventDefault();
 				that.autoGalleryStop();
 				that.gallery_progress(true);
 			});
 
-			$('body').on('click', '.scregalLeftBox', function(e){
+			$('body').on('click', _(window.scregal.classnames.scregalLeftBox), function(e){
 				e.preventDefault();
 				that.autoGalleryStop();
 				that.gallery_progress();
 			});
 
-			$('body').on('click', defaults.prev + ', .scregalLeftNavigation', function(e){
+			$('body').on('click', defaults.prev + ', ' + _(window.scregal.classnames.scregalLeftNavigation), function(e){
 				e.preventDefault();
 				e.stopPropagation();
 				that.gallery_progress();
 			});
 
-			$('body').on('click', defaults.next + ', .scregalRightNavigation', function(e){
+			$('body').on('click', defaults.next + ', ' + _(window.scregal.classnames.scregalRightNavigation), function(e){
 				e.preventDefault();
 				e.stopPropagation();
 				that.gallery_progress(true);
 			});
 
-			$('body').on('click', defaults.close + ', .scregalClose', function(e){
+			$('body').on('click', defaults.close + ', ' + _(window.scregal.classnames.scregalClose), function(e){
 				e.preventDefault();
 				e.stopPropagation();
 				that.closeGallery();
@@ -307,7 +347,7 @@
 			that.set_recent_scregal_data(data);
 			that.load_gallery_data();
 			isScregalWorking = true;
-			$('.scregalBox').fadeIn(300);
+			$(_(window.scregal.classnames.scregalBox)).fadeIn(300);
 			$instance.trigger('scregalAppeared');
 		};
 
@@ -328,8 +368,8 @@
 		};
 
 		Scregal_Class.prototype.closeGallery = function() {
-			$('.scregalBox').fadeOut(300);
-			$('.scregalFigure').remove();
+			$(_(window.scregal.classnames.scregalBox)).fadeOut(300);
+			$(_(window.scregal.classnames.scregalFigure)).remove();
 			isScregalWorking = false;
 			this.autoGalleryStop();
 			$instance.trigger('scregalDisappeared');
@@ -362,7 +402,7 @@
 		};
 
 		Scregal_Class.prototype.add_front_to_item = function() {
-			$('.scregalTitle').html(recent_scregal_data.frontTitle);
+			$(_(window.scregal.classnames.scregalTitle)).html(recent_scregal_data.frontTitle);
 		};
 
 		Scregal_Class.prototype.load_gallery_data = function() {
@@ -404,32 +444,34 @@
 
 		Scregal_Class.prototype.update_boxes_content = function() {
 
-			var $figure = $('<figure class="scregalFigure scregalAdding">');
+			var $figure = $('<figure class="' + window.scregal.classnames.scregalFigure + ' ' + window.scregal.classnames.scregalAdding + '">');
 			var $scregalFigureCenter = $figure.clone().css('background-image', 'url(' + recent_data_image.scregalCenterImg.href + ')');
 			var $scregalFigureLeft = $figure.clone().css('background-image', 'url(' + recent_data_image.scregalLeftImg.href + ')');
 			var $scregalFigureRight = $figure.clone().css('background-image', 'url(' + recent_data_image.scregalRightImg.href + ')');
 
-			$('.scregalWrap .scregalAdding').remove();
+			$(_(window.scregal.classnames.scregalWrap) + _(window.scregal.classnames.scregalRemoved)).remove();
 			$scregalCenterBox.prepend($scregalFigureCenter);
 			$scregalLeftBox.prepend($scregalFigureLeft);
 			$scregalRightBox.prepend($scregalFigureRight);
 
-			$('.scregalBesideBox .scregalAdded').animate(defaults.sideDisappearAnimation, defaults.disappearDuration, defaults.disappearEasing, function(){
-				$(this).remove();
+			$(_(window.scregal.classnames.scregalBesideBox) + _(window.scregal.classnames.scregalAdded)).addClass(window.scregal.classnames.scregalRemoving).animate(defaults.sideDisappearAnimation, defaults.disappearDuration, defaults.disappearEasing, function(){
+				$(this).removeClass(window.scregal.classnames.scregalRemoving);
+				$(this).addClass(window.scregal.classnames.scregalRemoved);
 			});
 
-			$('.scregalCenterBox .scregalAdded').animate(defaults.centerDisappearAnimation, defaults.disappearDuration, defaults.disappearEasing, function(){
-				$(this).remove();
+			$(_(window.scregal.classnames.scregalCenterBox) + _(window.scregal.classnames.scregalAdded)).addClass(window.scregal.classnames.scregalRemoving).animate(defaults.centerDisappearAnimation, defaults.disappearDuration, defaults.disappearEasing, function(){
+				$(this).removeClass(window.scregal.classnames.scregalRemoving);
+				$(this).addClass(window.scregal.classnames.scregalRemoved);
 			});
 
-			$('.scregalBesideBox .scregalAdding').animate(defaults.sideAppearAnimation, defaults.appearDuration, defaults.appearEasing, function(){
-				$(this).removeClass('scregalAdding');
-				$(this).addClass('scregalAdded');
+			$(_(window.scregal.classnames.scregalBesideBox) + _(window.scregal.classnames.scregalAdding)).animate(defaults.sideAppearAnimation, defaults.appearDuration, defaults.appearEasing, function(){
+				$(this).removeClass(window.scregal.classnames.scregalAdding);
+				$(this).addClass(window.scregal.classnames.scregalAdded);
 			});
 
-			$('.scregalCenterBox .scregalAdding').animate(defaults.centerAppearAnimation, defaults.appearDuration, defaults.appearEasing, function(){
-				$(this).removeClass('scregalAdding');
-				$(this).addClass('scregalAdded');
+			$(_(window.scregal.classnames.scregalCenterBox) + _(window.scregal.classnames.scregalAdding)).animate(defaults.centerAppearAnimation, defaults.appearDuration, defaults.appearEasing, function(){
+				$(this).removeClass(window.scregal.classnames.scregalAdding);
+				$(this).addClass(window.scregal.classnames.scregalAdded);
 			});
 		};
 
@@ -441,10 +483,10 @@
 	var auto_scregal_instances = $('.js-scregal');
 	auto_scregal_instances.each(function(){
 		var gallery = $(this);
-		var scregal = new Scregal(gallery);
+		var options = JSON.parse(gallery.attr('data-scregal-options'));
+		var scregal = new Scregal(gallery, options);
 		$(this).data('scregal', scregal);
 	});
-
 
 	$.fn.scregal = function(opts) {
 		$(this).each(function(){
