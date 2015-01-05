@@ -1,4 +1,4 @@
-http://www.scregal.blue-world.pl/assets/img/scregal-logo.png
+!(http://www.scregal.blue-world.pl/assets/img/scregal-logo.png)
 
 ##Install and usage:
 http://www.scregal.blue-world.pl
