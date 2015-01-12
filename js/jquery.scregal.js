@@ -1,7 +1,7 @@
 /**
  * Copyright (c) Bartłomiej Semańczyk - bartekss2@gmail.com http://www.blue-world.pl
- * @version 1.2
- * Last Update: Wednesday, 7 January 2015
+ * @version 1.3
+ * Last Update: Monday, 12 January 2015
 */
 
 (function($) {
@@ -32,6 +32,35 @@
 		scregalNavigation: "scregalNavigation",
 		scregalLeftNavigation: "scregalLeftNavigation",
 		scregalRightNavigation: "scregalRightNavigation"
+	};
+
+	var templates = {
+		footer: {
+			classname: 'scregal-footer-template',
+			frontContent: function() {
+				return $('<div class="navigation"><div class="prev"></div><div class="next"></div><div class="close"></div></div>');
+			},
+			basicHeight: function() {
+				return $(window).height() - $('.scregalFront').outerHeight();
+			},
+			frontTitle: function() {
+				var h1 = $('<div class="scregalSubtitle">');
+				var title = $(this).attr('data-title');
+				var author = $(this).attr('data-author');
+				var postlink = $(this).attr('data-post-link');
+				var posttitle = $(this).attr('data-post-title');
+				h1.append('<h3>'+ title + '</h3>');
+				author ? h1.append('<p>zdjęcie: ' + author + '</p>') : '';
+				postlink ? h1.append('zobacz więcej: <a href="' + postlink + '">' + posttitle + '</a>') : '';
+				return h1;
+			},
+			disappearDuration: 300,
+			appearDuration: 300,
+			addFront: true,
+			prev: '.prev',
+			next: '.next',
+			close: '.close'
+		}
 	};
 
 	if (window.scregal === undefined) {
@@ -100,6 +129,7 @@
 			this.defaults = {
 				elems: '> a',
 				maxWidth: '85%',
+				template: undefined,
 				centerDisappearAnimation: { opacity: 0 },
 				sideDisappearAnimation: { opacity: 0 },
 				centerAppearAnimation: { opacity: 1 },
@@ -109,7 +139,7 @@
 				disappearEasing: 'easeInOutExpo',
 				appearEasing: 'easeInOutExpo',
 				isNavigationHidden: false,
-				isNavigationKeyboard: true,
+				manageNavigationUsingKeyboard: true,
 				hideNavigationWhenAutoGallery: true,
 				hideFrontWhenAutoGallery: false,
 				runAutoGalleryAfterDelay: 5000,
@@ -126,6 +156,10 @@
 				getGalleryName: function() { return 'rel'; } //order with galleries, first check if elem has data-rel attribute. If there is no attribute, then the function is called with context of elem.
 				//+ json from options
 			};
+			if (opts.template) {
+				this.updateOptions(templates[opts.template]);
+				$scregalBox.addClass(templates[opts.template]['classname']);
+			}
 
 			this.updateOptions(opts);
 
@@ -347,7 +381,7 @@
 			$(document).on('keyup', function(e){
 				e.preventDefault();
 				var which = e.which;
-				if (that.isScregalWorking && that.defaults.isNavigationKeyboard) {
+				if (that.isScregalWorking && that.defaults.manageNavigationUsingKeyboard) {
 					switch (which) {
 						case 27 : that.closeGallery(); break;
 						case 37 : that.gallery_progress(); that.autoGalleryStop(); break;

@@ -7,7 +7,8 @@
 	-webkit-transition: all 400ms ease;
 	-webkit-transform: translateZ(0);
 }
-/* default pattern */
+
+/* default template */
 .scregalBox { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 1000; display: none; background: #000; overflow: hidden; }
 
 .scregalWrap { display: block; position: relative; top: 0; height: 100%; float: left; }
@@ -31,6 +32,21 @@
 .scregalRightNavigation { right: 30px; background-image: url('../img/arrow-right.png'); }
 .scregalClose { top: 30px; right: 30px; background-image: url('../img/close.png'); background-size: 30px; }
 
-/* footer pattern */
+
+
+/* footer template */
+.scregal-footer-template .scregalSubtitle { line-height: 15px; color: #979797; }
+.scregal-footer-template .scregalSubtitle > * { display: inline-block; padding-right: 20px;  }
+.scregal-footer-template .scregalSubtitle h3 { color: #fff; font-weight: normal; }
+.scregal-footer-template .navigation { position: absolute; top: 0; right: 0; height: 100%; right: 20px; }
+.scregal-footer-template .prev,
+.scregal-footer-template .next,
+.scregal-footer-template .close { background-repeat: no-repeat; background-position: center; background-size: 20px; opacity: 0.5; position: relative; float: left; top: 50%; margin-top: -15px; width: 40px; height: 30px; cursor: pointer; }
+.scregal-footer-template .prev { background-image: url('../img/arrow-left.png'); }
+.scregal-footer-template .next { background-image: url('../img/arrow-right.png'); }
+.scregal-footer-template .close { background-image: url('../img/close.png'); }
+.scregal-footer-template .prev:hover,
+.scregal-footer-template .next:hover,
+.scregal-footer-template .close:hover { opacity: 1; }
 
 
